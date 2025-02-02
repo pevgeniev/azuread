@@ -1,0 +1,13 @@
+.file-upload-container {
+    text-align: center;
+    padding: 20px;
+}
+
+button {
+    margin-top: 10px;
+}
+  
+mat-progress-bar {
+    width: 100%;
+    margin-top: 10px;
+}
