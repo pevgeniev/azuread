@@ -6,6 +6,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, catchError, map } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
+const openerOrigin = 'https://stackoverflow.com';
+
 @Component({
   selector: 'app-file-upload',
   imports: [
@@ -24,23 +26,42 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   
   recordId?: string | null;
   recordType?: string | null;
+  embedMode?: 'window' | 'iframe' | null;
   
   subs: Subscription[] = [];
   
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute) {
+    this.windowsMessage = this.windowsMessage.bind(this);
+  }
 
   ngOnInit() 
   { 
+    //get upload recrod type and id
     this.subs.push(
       this.route.queryParamMap.subscribe(params => {
         this.recordId = params.get('id');
         this.recordType = params.get('type');
+        this.embedMode = (params.get('embed') as any);
       })
+    );
+
+    //subscribe for messages from opener
+    window.addEventListener(
+      "message", this.windowsMessage,
+      false,
     );
   } 
   
+  windowsMessage (event: any){
+    console.log(event.origin);
+    if (event.origin !== openerOrigin) return;
+    // handle event
+    console.log('Continue event process')
+  }
+
   ngOnDestroy() { 
     this.subs.forEach(s => s.unsubscribe()); 
+    window.removeEventListener('message', this.windowsMessage);
   }
 
   onFileSelected(event: any): void {
@@ -56,6 +77,30 @@ export class FileUploadComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if(this.embedMode){
+      // simulate upload
+      const msg = {
+        type: 'fileresult',
+        data:
+        {
+          id: this.recordId, 
+          type: this.recordType, 
+          success: true, 
+          fileId: 'somefileid'
+        }
+      };
+      if(this.embedMode == 'iframe'){
+        if(window.parent){
+          window.parent.postMessage(msg, openerOrigin);
+        }
+      }else{
+        if(window.opener){
+          window.opener.postMessage(msg, openerOrigin);
+        }
+      }
+    }
+    return;
+    /*
     const formData = new FormData();
     formData.append('file', this.selectedFile, this.selectedFile.name);
 
@@ -72,6 +117,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
         return [];
       })
     ).subscribe();
+    */
   }
 
   handleUploadProgress(event: any): void {

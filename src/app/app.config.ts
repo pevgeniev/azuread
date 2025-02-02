@@ -38,6 +38,18 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
+function getInteractionType() : InteractionType.Popup | InteractionType.Redirect {
+  const parameters = new URLSearchParams(window.location.search);
+  let interactionType = InteractionType.Redirect;
+  if(parameters){
+    const embedMode = parameters.get('embed');
+    if(embedMode && embedMode == 'iframe'){
+      interactionType = InteractionType.Popup;
+    }
+  }
+  return interactionType;
+}
+
 export function loggerCallback(logLevel: LogLevel, message: string) {
   console.log(message);
 }
@@ -65,6 +77,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 }
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+  const interactionType = getInteractionType();
   const protectedResourceMap = new Map<string, Array<string>>();
   protectedResourceMap.set(
     environment.apiConfig.uri,
@@ -72,14 +85,15 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   );
 
   return {
-    interactionType: InteractionType.Redirect,
+    interactionType: interactionType,
     protectedResourceMap,
   };
 }
 
 export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+  const interactionType = getInteractionType();
   return {
-    interactionType: InteractionType.Redirect,
+    interactionType: interactionType,
     authRequest: {
       scopes: [...environment.apiConfig.scopes],
     },

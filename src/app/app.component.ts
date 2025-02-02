@@ -72,7 +72,12 @@ export class AppComponent implements OnInit, OnDestroy {
     private msalBroadcastService: MsalBroadcastService,
     private breakpointObserver: BreakpointObserver,
     private router: Router
-  ) {}
+  ) {
+    const parameters = new URLSearchParams(window.location.search);
+    if(parameters && parameters.get('embed')){
+      this.isEmbeddableRoute = true;
+    }
+  }
 
   ngOnInit(): void {
     this.authService.handleRedirectObservable().subscribe();
@@ -87,7 +92,7 @@ export class AppComponent implements OnInit, OnDestroy {
             msg.eventType === EventType.ACCOUNT_ADDED ||
             msg.eventType === EventType.ACCOUNT_REMOVED
         )
-      )
+      ) 
       .subscribe((result: EventMessage) => {
         if (this.authService.instance.getAllAccounts().length === 0) {
           window.location.pathname = '/';
