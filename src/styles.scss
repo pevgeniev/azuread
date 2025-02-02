@@ -1,11 +1,18 @@
+
+@use '@angular/material' as mat;
+@use '../m3-theme.scss';
+
 /* You can add global styles to this file, and also import other style files */
-@import '@angular/material/prebuilt-themes/cyan-orange.css';
+//@import '@angular/material/prebuilt-themes/cyan-orange.css';
+
+@include mat.core();
 
 html,
 body {
     height: 100%;
 }
 html{
+    @include mat.all-component-themes(m3-theme.$dark-theme);
     background: rgb(63,66, 69);
 }
 

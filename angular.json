@@ -5,7 +5,11 @@
   "projects": {
     "angular-standalone-sample": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"       
+        }
+      }  ,
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -28,7 +32,8 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/cyan-orange.css",
-              "src/styles.css"
+              "m3-theme.scss",
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -118,8 +123,9 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/deeppurple-amber.css",
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/cyan-orange.css",
+              "m3-theme.scss",
+              "src/styles.scss"
             ],
             "scripts": []
           }

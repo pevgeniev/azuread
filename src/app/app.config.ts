@@ -47,7 +47,7 @@ function getInteractionType() : InteractionType.Popup | InteractionType.Redirect
       interactionType = InteractionType.Popup;
     }
   }
-  return interactionType;
+  return InteractionType.Redirect; // interactionType;
 }
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
