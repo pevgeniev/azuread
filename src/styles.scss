@@ -1,24 +1,50 @@
 
 @use '@angular/material' as mat;
 @use '../m3-theme.scss';
+@use "sass:map";
 
 /* You can add global styles to this file, and also import other style files */
 //@import '@angular/material/prebuilt-themes/cyan-orange.css';
 
 @include mat.core();
 
+$backgroundColor: 'red';
+//$color: map.get(m3-theme.$dark-theme, "color");
+//$colorBackground: map.get($color, "background");
+//$colorBackground: map.set($colorBackground, "background", $backgroundColor);
+//$color: map.set($color, "background", $colorBackground);
+//$final-dark-theme: map.set(m3-theme.$dark-theme, "color", $color);
+
+$my-theme: map.set(
+  m3-theme.$dark-theme,
+  'background',
+  $backgroundColor
+);
+
 html,
 body {
     height: 100%;
 }
 html{
-    @include mat.all-component-themes(m3-theme.$dark-theme);
-    background: rgb(63,66, 69);
+    @include mat.all-component-themes($my-theme);
+
+    //@include mat.all-component-themes(m3-theme.$light-theme);
+
+    .dark-theme {
+        // This mixin only generates the color styles now.
+        ///@include mat.all-component-colors(m3-theme.$dark-theme);
+    } 
 }
 
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+
+    // --mat-app-background-color: #eee;
+  
+    // .dark-theme {
+    //     --mat-app-background-color: #rgb(63, 65, 68);
+    // }
 }
 
 .container {
