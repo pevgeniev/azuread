@@ -124,9 +124,9 @@ export class AppComponent implements OnInit, OnDestroy {
         filter(event => event instanceof NavigationEnd)
       ).subscribe((ev) => {
         const event: NavigationEnd = ev as NavigationEnd;
-        console.log(event.url);
-        const isEmbedUrl = this.embeddableRoutes.find(e => event.url.indexOf(`/${e}`) >= 0);
-        this.isEmbeddableRoute = !!isEmbedUrl;
+        //console.log(event.url);
+        //const isEmbedUrl = this.embeddableRoutes.find(e => event.url.indexOf(`/${e}`) >= 0);
+        //this.isEmbeddableRoute = !!isEmbedUrl;
       });
   }
 

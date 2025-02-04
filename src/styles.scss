@@ -8,31 +8,20 @@
 
 @include mat.core();
 
-$backgroundColor: 'red';
-//$color: map.get(m3-theme.$dark-theme, "color");
-//$colorBackground: map.get($color, "background");
-//$colorBackground: map.set($colorBackground, "background", $backgroundColor);
-//$color: map.set($color, "background", $colorBackground);
-//$final-dark-theme: map.set(m3-theme.$dark-theme, "color", $color);
-
-$my-theme: map.set(
-  m3-theme.$dark-theme,
-  'background',
-  $backgroundColor
-);
+$backgroundColor: rgb(63, 66, 68);
 
 html,
 body {
     height: 100%;
 }
 html{
-    @include mat.all-component-themes($my-theme);
-
-    //@include mat.all-component-themes(m3-theme.$light-theme);
+    @include mat.all-component-themes(m3-theme.$light-theme);
 
     .dark-theme {
-        // This mixin only generates the color styles now.
-        ///@include mat.all-component-colors(m3-theme.$dark-theme);
+        @include mat.all-component-colors(m3-theme.$dark-theme);
+
+        --mat-app-background-color: #{$backgroundColor} !important;
+        --mat-sidenav-content-background-color: #{$backgroundColor} !important;
     } 
 }
 
