@@ -41,14 +41,18 @@ import { Location, LocationStrategy, PathLocationStrategy } from '@angular/commo
 
 function getInteractionType() : InteractionType.Popup | InteractionType.Redirect {
   const parameters = new URLSearchParams(window.location.search);
+  console.log('Msal config redirect type', window.location.search);
+
   let interactionType = InteractionType.Redirect;
   if(parameters){
     const embedMode = parameters.get('embed');
+    console.log('Msal config redirect mode', embedMode);
     if(embedMode && embedMode == 'iframe'){
       interactionType = InteractionType.Popup;
+      console.log('Msal interact type popup');
     }
   }
-  return InteractionType.Redirect; // interactionType;
+  return interactionType;
 }
 
 export function loggerCallback(logLevel: LogLevel, message: string) {

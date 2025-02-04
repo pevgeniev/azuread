@@ -27,16 +27,18 @@ export class Msal2Guard extends MsalGuard {
   override canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> {
-
+      console.log('msal2 attempt ssosilent');
       return from(this.msalService.instance.ssoSilent({
         // Optionally, you can specify scopes here.
         scopes: (this.msalConfig?.authRequest as any)?.scopes || ['openid email profile']
       })).pipe(
         switchMap((result: AuthenticationResult) => {
           // If silent sign-in succeeds, return true.
+          console.log('msal2 success ssosilent');
           return of(true);
         }),
         catchError((error: any) => {
+          console.log('Custom msal failed', error);
           return super.canActivate(route, state);
         }
         )
@@ -45,16 +47,18 @@ export class Msal2Guard extends MsalGuard {
   override canActivateChild(
     childRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> {
-
+      console.log('msal2 attempt ssosilent child');
       return from(this.msalService.instance.ssoSilent({
         // Optionally, you can specify scopes here.
         scopes: (this.msalConfig?.authRequest as any)?.scopes || ['openid email profile']
       })).pipe(
         switchMap((result: AuthenticationResult) => {
           // If silent sign-in succeeds, return true.
+          console.log('msal2 success ssosilent child');
           return of(true);
         }),
         catchError((error: any) => {
+          console.log('Custom msal child failed', error);
           return super.canActivateChild(childRoute, state);
         }
         )
