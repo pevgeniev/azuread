@@ -37,6 +37,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 function getInteractionType() : InteractionType.Popup | InteractionType.Redirect {
   const parameters = new URLSearchParams(window.location.search);
@@ -101,6 +102,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   };
 }
 
+export const LOCATION_OBJECT = 'LOCATION_OBJECT';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -133,6 +136,8 @@ export const appConfig: ApplicationConfig = {
     },
     MsalService,
     MsalGuard,
-    MsalBroadcastService, provideAnimationsAsync(),
+    MsalBroadcastService, provideAnimationsAsync(), 
+    Location, 
+    {provide: LocationStrategy, useClass: PathLocationStrategy}
   ],
 };

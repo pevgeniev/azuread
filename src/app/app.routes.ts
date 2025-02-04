@@ -5,6 +5,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { MsalGuard } from '@azure/msal-angular';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { Msal2Guard } from './msal2.guard';
 
 export interface NavRoute extends Partial<Route> {
   name?: string;
@@ -18,7 +19,7 @@ export const routes: NavRoute[] = [
     icon: 'person',
     order: 10,
     component: ProfileComponent,
-    canActivate: [MsalGuard],
+    canActivate: [Msal2Guard],
   },
   {
     path: 'home',
@@ -26,7 +27,7 @@ export const routes: NavRoute[] = [
     icon: 'home',
     order: 0,
     component: HomeComponent,
-    canActivate: [MsalGuard],
+    canActivate: [Msal2Guard],
   },
   {
     path: 'login-failed',
@@ -35,7 +36,7 @@ export const routes: NavRoute[] = [
   {
     path: 'fileupload',
     component: FileUploadComponent,
-    canActivate: [MsalGuard],
+    canActivate: [Msal2Guard],
   },
   { path: '',   redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
