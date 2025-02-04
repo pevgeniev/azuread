@@ -18,9 +18,6 @@ jobs:
        id-token: write
        contents: read
     steps:
-      - name: Change Ownership of .git Directory
-        run: |
-          sudo chown -R $USER:$USER .git/
       - uses: actions/checkout@v3
         with:
           submodules: true
