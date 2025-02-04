@@ -63,7 +63,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       postLogoutRedirectUri: '/',
     },
     cache: {
-      cacheLocation: BrowserCacheLocation.SessionStorage,
+      cacheLocation: BrowserCacheLocation.LocalStorage,
     },
     system: {
       allowPlatformBroker: false, // Disables WAM Broker
