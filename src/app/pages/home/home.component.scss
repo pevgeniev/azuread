@@ -1,0 +1,39 @@
+a {
+    text-decoration: none;
+    color: black;
+    background-color: rgb(250,180,13);
+    padding: 20px;
+    border-radius: 10px;
+    display: inline-block;
+    font-size: 20px;
+
+    img{
+        filter: grayscale(1);
+    }
+}
+
+mat-card{
+    font-size: 22px;
+    margin-bottom: 8px;
+    box-shadow: none;
+}
+
+#mainButtons{
+    width: 1400px;
+    margin: 0 auto;
+    padding-top: 5px;
+
+    a{
+        min-width: 300px;
+        text-align: center;
+        font-size: 26px;
+    }
+}
+
+::ng-deep{
+    a{
+        .mdc-button__label{
+            top: -5px;
+        }
+    }
+}

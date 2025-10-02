@@ -1,0 +1,121 @@
+<button 
+  mat-icon-button 
+  [matMenuTriggerFor]="notificationMenu"
+  class="notification-button header-notification">
+  <mat-icon 
+    [matBadge]="unreadCount" 
+    [matBadgeHidden]="unreadCount === 0"
+    matBadgeColor="warn"
+    matBadgeSize="medium"
+    class="notification-icon">
+    notifications
+  </mat-icon>
+</button>
+
+<mat-menu #notificationMenu="matMenu" class="notification-menu">
+  <div class="notification-header" (click)="$event.stopPropagation();">
+    <h3>Notifications</h3>
+    <button 
+      mat-button 
+      color="primary" 
+      (click)="clearAllNotifications()"
+      [disabled]="notifications.length === 0">
+      Clear All
+    </button>
+  </div>
+  
+  <mat-divider></mat-divider>
+  
+  <div class="notification-content" (click)="$event.stopPropagation();">
+    <div *ngIf="notifications.length === 0" class="no-notifications">
+      <mat-icon>notifications_none</mat-icon>
+      <p>No new notifications</p>
+    </div>
+    
+    <mat-list *ngIf="notifications.length > 0">
+      <ng-container *ngFor="let notification of notifications; let i = index">
+        <mat-list-item class="notification-item">
+          <div class="notification-content-item">
+            
+            <!-- Purchase Order Notification -->
+            <app-purchase-order-notification 
+              *ngIf="notification.notificationType === NotificationTypes.PURCHASE_ORDER"
+              [notificationData]="getNotificationData(notification)"
+              [timestamp]="notification.timestamp"
+              (remove)="removeNotification(i)">
+            </app-purchase-order-notification>
+            
+            <!-- Add other notification types here as they are implemented -->
+            <!-- Order Status Notification -->
+            <div *ngIf="notification.notificationType === NotificationTypes.ORDER_STATUS" 
+                 class="notification-wrapper">
+              <div class="notification-header-item">
+                <strong>Order Status Update</strong>
+                <button 
+                  mat-icon-button 
+                  (click)="removeNotification(i)"
+                  class="remove-button">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              <p class="notification-message">{{ getNotificationData(notification)?.message }}</p>
+              <small class="notification-time">
+                {{ formatTime(notification.timestamp) }}
+              </small>
+            </div>
+            
+            <!-- System Alert Notification -->
+            <div *ngIf="notification.notificationType === NotificationTypes.SYSTEM_ALERT" 
+                 class="notification-wrapper">
+              <div class="notification-header-item">
+                <strong>{{ getNotificationData(notification)?.title }}</strong>
+                <button 
+                  mat-icon-button 
+                  (click)="removeNotification(i)"
+                  class="remove-button">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              <p class="notification-message">{{ getNotificationData(notification)?.message }}</p>
+              <small class="notification-time">
+                {{ formatTime(notification.timestamp) }}
+              </small>
+            </div>
+            
+            <!-- Fallback for unknown notification types -->
+            <div *ngIf="!notification.notificationType || 
+                        (notification.notificationType !== NotificationTypes.PURCHASE_ORDER && 
+                         notification.notificationType !== NotificationTypes.ORDER_STATUS &&
+                         notification.notificationType !== NotificationTypes.SYSTEM_ALERT)" 
+                 class="notification-wrapper">
+              <div class="notification-header-item">
+                <strong>Unknown Notification</strong>
+                <button 
+                  mat-icon-button 
+                  (click)="removeNotification(i)"
+                  class="remove-button">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              <p class="notification-message">{{ notification.notificationType || 'No type specified' }}</p>
+              <small class="notification-time">
+                {{ formatTime(notification.timestamp) }}
+              </small>
+            </div>
+            
+          </div>
+        </mat-list-item>
+        <mat-divider *ngIf="i < notifications.length - 1"></mat-divider>
+      </ng-container>
+    </mat-list>
+  </div>
+  
+  <!-- Connection Status Footer -->
+  <div class="connection-status" 
+       [class.status-connected]="connectionStatus === 'Connected'"
+       [class.status-connecting]="connectionStatus === 'Connecting'"
+       [class.status-reconnecting]="connectionStatus === 'Reconnecting'"
+       [class.status-disconnected]="connectionStatus === 'Disconnected'">
+    Status: {{ connectionStatus }}
+  </div>
+</mat-menu>

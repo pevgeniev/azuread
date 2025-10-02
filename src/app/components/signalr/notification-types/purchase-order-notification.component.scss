@@ -1,0 +1,175 @@
+.purchase-order-notification {
+  width: 100%;
+}
+
+.notification-header-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.notification-message {
+  margin: 0 0 8px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.notification-details {
+  margin: 8px 0;
+  font-size: 12px;
+}
+
+.contragent-info, .lead-info {
+  margin: 8px 0 4px 0;
+}
+
+.contragent-details, .lead-details {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #2196f3;
+  font-size: 11px;
+
+  mat-icon {
+    font-size: 14px;
+    height: 14px;
+    width: 14px;
+  }
+}
+
+.lead-details {
+  color: #4caf50;
+}
+
+.notification-actions {
+  margin: 12px 0 8px 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.add-to-lead-button, .open-lead-button {
+  font-size: 12px;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 12px;
+  position: relative;
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    margin-right: 4px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.button-spinner {
+  margin-right: 4px;
+  
+  ::ng-deep circle {
+    stroke: white;
+  }
+}
+
+.items-tree {
+  margin: 4px 0 0 8px;
+  padding: 0;
+}
+
+.item-node {
+  margin: 6px 0;
+  border-left: 2px solid #e0e0e0;
+  padding-left: 8px;
+}
+
+.item-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  color: #333;
+  font-size: 12px;
+  margin-bottom: 4px;
+
+  .item-icon {
+    font-size: 14px;
+    height: 14px;
+    width: 14px;
+    color: #2196f3;
+  }
+
+  .name {
+    font-weight: 600;
+  }
+}
+
+.item-details {
+  margin-left: 18px;
+}
+
+.item-detail {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 2px 0;
+  font-size: 11px;
+  color: #666;
+
+  .detail-icon {
+    font-size: 12px;
+    height: 12px;
+    width: 12px;
+    color: #757575;
+  }
+
+  .detail-label {
+    min-width: 50px;
+    font-weight: 500;
+  }
+
+  .detail-value {
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.more-items-node {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 0;
+  padding-left: 8px;
+  font-style: italic;
+  color: #999;
+  font-size: 11px;
+
+  .item-icon {
+    font-size: 14px;
+    height: 14px;
+    width: 14px;
+  }
+}
+
+.notification-time {
+  color: #999;
+  font-size: 11px;
+  display: block;
+  margin-top: 8px;
+}
+
+.remove-button {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+}

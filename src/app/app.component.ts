@@ -5,7 +5,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDrawerMode, MatSidenavModule } from '@angular/material/sidenav';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
@@ -27,12 +26,15 @@ import {
 } from '@azure/msal-browser';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { routes } from './app.routes';
+import { Permission, routes } from './app.routes';
+import { ProfileType } from './models/profile';
+import { OAuth2ProfileService } from './services/profile.service';
+import { ProfileService, User } from './backend';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
+    styleUrls: ['./app.component.scss'],
     imports: [
         CommonModule,
         MsalModule,
@@ -41,10 +43,10 @@ import { routes } from './app.routes';
         MatToolbarModule,
         MatButtonModule,
         MatMenuModule,
-        MatSidenavModule,
         MatIconModule,
         MatListModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatToolbarModule
     ]
 })
 export class AppComponent implements OnInit, OnDestroy {
@@ -53,38 +55,61 @@ export class AppComponent implements OnInit, OnDestroy {
   loginDisplay = false;
 
   /* navigation, screen size and menu drawer, embeddable routes */ 
-  private embeddableRoutes = ['fileupload'];
+  private embeddableRoutes = ['embed'];
+  public embedRoute: string | undefined = '';
+  isEmbedded = false;
   isEmbeddableRoute = false;
-  isSidenavOpen = true;
+  isHome = false;
   isSmallScreen = false;
-  drawMode: MatDrawerMode = 'side'
+  currentRoute: string = '';
   navItems = routes.map(r => { 
     return {
     ...r,
     name: r.title
   }}).filter(r => r.name).sort((a, b) => (a.order??0) - (b.order??0));
+  visibleNavs = this.navItems.filter(n => n.title == 'Home');
+  profile: ProfileType | undefined;
   
   private readonly _destroying$ = new Subject<void>();
 
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
-    private authService: MsalService,
+    private authService: MsalService, 
+    private profileOAuthSvc: OAuth2ProfileService,
     private msalBroadcastService: MsalBroadcastService,
     private breakpointObserver: BreakpointObserver,
+    private profileSvc: ProfileService,
     private router: Router
   ) {
     const parameters = new URLSearchParams(window.location.search);
     if(parameters && parameters.get('embed')){
-      this.isEmbeddableRoute = true;
+      this.isEmbedded = true;
     }
   }
 
+  mapRoutes(){
+
+    const idTokenClaims = this.profile?.idTokenClaims || {} as any;
+    const userGroups: string[] = idTokenClaims?.groups || [];
+    this.visibleNavs = (this.navItems || []).filter(ni => !ni.hidden && 
+        ( !ni.permissions || ni.permissions.length == 0 || ni.permissions.some(p =>userGroups.includes(p)) ) ); 
+  }
+
   ngOnInit(): void {
-    this.authService.handleRedirectObservable().subscribe();
+    this.authService.handleRedirectObservable().subscribe(
+       (val) => {
+        if(!this.loginDisplay){
+          this.setLoginDisplay();
+        }
+        this.checkAndSetActiveAccount();
+        this.getLoggedInUser();
+       }
+    );
     
     this.isIframe = window !== window.parent && !window.opener; // Remove this line to use Angular Universal
 
     this.authService.instance.enableAccountStorageEvents(); // Optional - This will enable ACCOUNT_ADDED and ACCOUNT_REMOVED events emitted when a user logs in or out of another tab or window
+    
     this.msalBroadcastService.msalSubject$
       .pipe(
         filter(
@@ -109,25 +134,33 @@ export class AppComponent implements OnInit, OnDestroy {
         takeUntil(this._destroying$)
       )
       .subscribe(() => {
-        this.setLoginDisplay();
+        if(!this.loginDisplay){
+          this.setLoginDisplay();
+        }
         this.checkAndSetActiveAccount();
+        this.getLoggedInUser();
       });
 
       this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
         .subscribe(result => {
           this.isSmallScreen = result.matches;
-          this.isSidenavOpen = !this.isSmallScreen;
-          this.drawMode = !this.isSmallScreen ? 'side' : 'over';
         });
 
       this.router.events.pipe(
         filter(event => event instanceof NavigationEnd)
       ).subscribe((ev) => {
         const event: NavigationEnd = ev as NavigationEnd;
-        //console.log(event.url);
-        //const isEmbedUrl = this.embeddableRoutes.find(e => event.url.indexOf(`/${e}`) >= 0);
-        //this.isEmbeddableRoute = !!isEmbedUrl;
+        this.currentRoute = (event.url || '');;
+        if(this.currentRoute.charAt(0) == '/'){
+          this.currentRoute = this.currentRoute.substring(1);
+        }
+        this.embedRoute = this.embeddableRoutes.find(e => event.url.indexOf(`/${e}`) >= 0);
+        if(!this.isEmbedded){
+          this.isEmbeddableRoute = !!this.embedRoute;
+        }
+        this.isHome = this.currentRoute.split('/')[0] == 'home';
       });
+  
   }
 
   setLoginDisplay() {
@@ -151,10 +184,20 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  getLoggedInUser(){
+    if(!this.profile){
+      this.profileOAuthSvc.getProfile().subscribe((profile: ProfileType) => {
+        this.profile = profile;
+        this.mapRoutes();
+      });
+    }
+  }
+
   loginRedirect() {
     if (this.msalGuardConfig.authRequest) {
       this.authService.loginRedirect({
         ...this.msalGuardConfig.authRequest,
+        redirectUri: '/azuread'
       } as RedirectRequest);
     } else {
       this.authService.loginRedirect();
@@ -180,7 +223,7 @@ export class AppComponent implements OnInit, OnDestroy {
   logout(popup?: boolean) {
     if (popup) {
       this.authService.logoutPopup({
-        mainWindowRedirectUri: '/',
+        mainWindowRedirectUri: '/azuread',
       });
     } else {
       this.authService.logoutRedirect();

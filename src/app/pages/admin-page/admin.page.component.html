@@ -1,0 +1,9 @@
+<div>
+    <p>admin page</p>
+    <button (click)="onAddEcho()" [disabled]="isLoading">
+        Add echo
+    </button>
+    <mat-list>
+        <mat-list-item *ngFor="let echo of allEchos">{{echo.name}}</mat-list-item>
+    </mat-list>
+</div>

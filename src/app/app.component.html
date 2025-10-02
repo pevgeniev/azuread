@@ -1,29 +1,31 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav [mode]="drawMode" class="sidenav" [class.hidden]="isEmbeddableRoute" [(opened)]="isSidenavOpen">
+<div class="main-container" [class.file-upload]="embedRoute && embedRoute == 'fileupload'" [class.no-background]="!isHome">
+  <header class="topbar" [class.hidden]="isEmbedded || isEmbeddableRoute">
     <a routerLink="/" class="logo left">
-      <img src="img/logo.png" alt="logo" width="146">
+      <img src="img/logo.png" alt="logo">
     </a>
-    <button *ngIf="isSmallScreen" mat-icon-button id="closenav" (click)="sidenav.toggle()">
-      <mat-icon>close</mat-icon>
-    </button>
-    <mat-nav-list>
-      <a mat-list-item routerLink="{{item.path}}" routerLinkActive="'active'" *ngFor="let item of navItems">
-        <mat-icon>{{ item.icon }}</mat-icon>
-        {{ item.name }}
+    <div id="logged-user" *ngIf="!!profile && profile.name">
+      <span>{{profile.name}}</span> 
+    </div>
+    <nav>
+      <a routerLink="/{{item.path}}" [attr.title]="item.name" [class.active]="item.path == currentRoute" *ngFor="let item of visibleNavs">
+        <mat-icon *ngIf="item.icon">{{ item.icon }}</mat-icon>
+        <img *ngIf="item.img" [src]="item.img">
+        <span class="nav-text" [class.translated]="!!item.img">{{ item.name }}</span>
       </a>
-    </mat-nav-list>
-  </mat-sidenav>
+    </nav>
+    
+  </header>
 
-  <mat-sidenav-content>
-    <button *ngIf="isSmallScreen && !isEmbeddableRoute" mat-icon-button (click)="sidenav.toggle()">
-      <mat-icon>menu</mat-icon>
-    </button>
+  <div class="main-content">
+    <a *ngIf="(isEmbeddableRoute) && !isEmbedded" routerLink="/" class="logo left">
+      <img src="img/logo.png" alt="logo">
+    </a>
 
-    <div class="container">
+    <div class="container" [class]="{'embedded': isIframe && isEmbedded, 'embeddedable': isEmbeddableRoute}">
       <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
-      @if (!isIframe || isEmbeddableRoute) {
+      @if (!isIframe || isEmbedded) {
         <router-outlet></router-outlet>
       }
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Msal2Guard } from './msal2.guard';
+import { Msal2Guard } from '../src/app/auth/msal2.guard';
 
 describe('Msal2Guard', () => {
   let guard: Msal2Guard;

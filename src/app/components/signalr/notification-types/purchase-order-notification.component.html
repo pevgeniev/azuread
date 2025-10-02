@@ -1,0 +1,99 @@
+<div class="purchase-order-notification">
+  <div class="notification-header-item">
+    <strong>{{ notificationData?.title || 'Purchase Order Update' }}</strong>
+    <button 
+      mat-icon-button 
+      (click)="onRemove()"
+      class="remove-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <p class="notification-message">{{ notificationData?.message }}</p>
+  
+  <!-- Contragent Information -->
+  <div class="contragent-info" *ngIf="notificationData?.purchaseOrder?.contragnetId || notificationData?.purchaseOrder?.contragnetName">
+    <small class="contragent-details">
+      <mat-icon>business</mat-icon>
+      <span *ngIf="notificationData?.purchaseOrder?.contragnetName; else contragentIdOnly">
+        {{ notificationData.purchaseOrder.contragnetName }}
+        <span *ngIf="notificationData.purchaseOrder.contragnetId"> (ID: {{ notificationData.purchaseOrder.contragnetId }})</span>
+      </span>
+      <ng-template #contragentIdOnly>
+        Contragent ID: {{ notificationData.purchaseOrder.contragnetId }}
+      </ng-template>
+    </small>
+  </div>
+
+  <!-- Lead Information -->
+  <div class="lead-info" *ngIf="notificationData?.purchaseOrder?.leadId">
+    <small class="lead-details">
+      <mat-icon>assignment</mat-icon>
+      Lead ID: {{ notificationData.purchaseOrder.leadId }}
+    </small>
+  </div>
+  
+  <div class="notification-details" *ngIf="notificationData?.purchaseOrder?.items && notificationData.purchaseOrder.items.length > 0">
+    <p><strong>Items ({{ notificationData.purchaseOrder.items.length }}):</strong></p>
+    <div class="items-tree">
+      <div *ngFor="let item of notificationData.purchaseOrder.items | slice:0:3" class="item-node">
+        <div class="item-name">
+          <mat-icon class="item-icon">inventory_2</mat-icon>
+          <span class="name">{{ item.medicineName }}</span>
+        </div>
+        <div class="item-details">
+          <div class="item-detail" *ngIf="item.quantity">
+            <mat-icon class="detail-icon">shopping_cart</mat-icon>
+            <span class="detail-label">Quantity:</span>
+            <span class="detail-value">{{ item.quantity }}</span>
+          </div>
+          <div class="item-detail" *ngIf="item.price">
+            <mat-icon class="detail-icon">euro</mat-icon>
+            <span class="detail-label">Price:</span>
+            <span class="detail-value">{{ item.price | currency:'EUR':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="item-detail" *ngIf="item.price && item.quantity">
+            <mat-icon class="detail-icon">calculate</mat-icon>
+            <span class="detail-label">Amount:</span>
+            <span class="detail-value">{{ (item.price * item.quantity) | currency:'EUR':'symbol':'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="notificationData.purchaseOrder.items.length > 3" class="more-items-node">
+        <mat-icon class="item-icon">more_horiz</mat-icon>
+        <span>{{ notificationData.purchaseOrder.items.length - 3 }} more items...</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Action Buttons -->
+  <div class="notification-actions">
+    <!-- Show "Open Lead" button if leadId exists -->
+    <button 
+      *ngIf="notificationData?.purchaseOrder?.leadId" 
+      mat-raised-button 
+      color="primary"
+      class="open-lead-button"
+      (click)="onOpenLead()"
+      [disabled]="isLoading">
+      <mat-icon>open_in_new</mat-icon>
+      Open Lead
+    </button>
+
+    <!-- Show "Add to Lead" or "Create Lead & Add" button -->
+    <button 
+      mat-raised-button 
+      [color]="notificationData?.purchaseOrder?.leadId ? 'accent' : 'primary'"
+      class="add-to-lead-button"
+      (click)="onAddToLead()"
+      [disabled]="isLoading">
+      <mat-spinner *ngIf="isLoading" diameter="16" class="button-spinner"></mat-spinner>
+      <mat-icon *ngIf="!isLoading">{{ notificationData?.purchaseOrder?.leadId ? 'add' : 'add_circle' }}</mat-icon>
+      {{ notificationData?.purchaseOrder?.leadId ? 'Add to Lead' : 'Create Lead & Add' }}
+    </button>
+  </div>
+  
+  <small class="notification-time">
+    {{ timestamp | date:'short' }}
+  </small>
+</div>

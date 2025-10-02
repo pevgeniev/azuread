@@ -1,5 +1,5 @@
 module.exports = {
-    displayName: "angular-standalone-sample",
+    displayName: "devocean-demo",
     globals: {
         __PORT__: 4217,
         __STARTCMD__: "npm start -- --port 4217",

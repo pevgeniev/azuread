@@ -1,0 +1,155 @@
+.notification-button {
+  position: relative;
+  color: white !important; /* Ensure icon is visible on dark backgrounds */
+}
+
+.header-notification {
+  margin-right: 8px; /* Add some spacing */
+}
+
+.notification-icon, 
+.notification-button .mat-icon,
+.notification-button mat-icon {
+  color: white !important; /* Force white color for the notifications icon */
+  font-size: 24px !important;
+  height: 24px !important;
+  width: 24px !important;
+}
+
+.notification-button:hover,
+.notification-button.mat-mdc-icon-button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important; /* Light hover effect */
+}
+
+/* Badge styling to ensure visibility */
+.notification-button .mat-badge-content,
+.notification-button .mat-mdc-badge-content {
+  background-color: #f44336 !important; /* Red badge background */
+  color: white !important; /* White text on badge */
+  font-weight: bold !important;
+  min-width: 16px !important;
+  height: 16px !important;
+  font-size: 10px !important;
+}
+
+/* Ensure the button itself is properly styled */
+.notification-button.mat-mdc-icon-button {
+  color: white !important;
+  --mdc-icon-button-icon-color: white !important;
+}
+
+.notification-menu {
+  width: 400px;
+  max-width: 90vw;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f5f5f5;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+.notification-content {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.no-notifications {
+  text-align: center;
+  padding: 32px 16px;
+  color: #666;
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    color: #ccc;
+    margin-bottom: 8px;
+  }
+}
+
+.notification-item {
+  padding: 0 !important;
+  height: auto !important;
+}
+
+.notification-content-item {
+  width: 100%;
+  padding: 12px 16px;
+}
+
+// Common styles for notification wrappers
+.notification-wrapper {
+  width: 100%;
+}
+
+.notification-header-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.notification-message {
+  margin: 0 0 8px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.notification-time {
+  color: #999;
+  font-size: 11px;
+  display: block;
+  margin-top: 8px;
+}
+
+.remove-button {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+}
+
+.connection-status {
+  padding: 8px 16px;
+  font-size: 12px;
+  background-color: #f0f0f0;
+  border-top: 1px solid #e0e0e0;
+
+  &.status-connected {
+    color: #4caf50;
+  }
+
+  &.status-connecting, 
+  &.status-reconnecting {
+    color: #ff9800;
+  }
+
+  &.status-disconnected {
+    color: #f44336;
+  }
+}
+
+@media (max-width: 530px) {
+  .notification-button,
+  .notification-button.mat-mdc-icon-button{ 
+      background-color: rgba(0, 0, 0, 0.2) !important; /* Light hover effect */
+  }
+  .notification-button:hover,
+  .notification-button.mat-mdc-icon-button:hover{ 
+      background-color: rgba(0, 0, 0, 0.5) !important; /* Light hover effect */
+  }
+}

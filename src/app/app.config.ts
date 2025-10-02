@@ -11,6 +11,7 @@ import {
   withInterceptorsFromDi,
   HTTP_INTERCEPTORS,
   withFetch,
+  withXsrfConfiguration,
 } from '@angular/common/http';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import {
@@ -36,8 +37,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { provideApi, withBackendApiConfiguration } from './services/api.provider';
 
 function getInteractionType() : InteractionType.Popup | InteractionType.Redirect {
   const parameters = new URLSearchParams(window.location.search);
@@ -64,8 +67,8 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     auth: {
       clientId: environment.msalConfig.auth.clientId,
       authority: environment.msalConfig.auth.authority,
-      redirectUri: '/',
-      postLogoutRedirectUri: '/',
+      redirectUri: '/azuread',
+      postLogoutRedirectUri: '/azuread',
     },
     cache: {
       cacheLocation: BrowserCacheLocation.LocalStorage,
@@ -89,6 +92,16 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
     environment.apiConfig.scopes
   );
 
+  protectedResourceMap.set(
+    environment.backendConfig.uri,
+    environment.backendConfig.scopes
+  );
+
+  protectedResourceMap.set(
+    environment.powerBIConfig.uri,
+    environment.powerBIConfig.scopes
+  );
+
   return {
     interactionType: interactionType,
     protectedResourceMap,
@@ -100,7 +113,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
     interactionType: interactionType,
     authRequest: {
-      scopes: [...environment.apiConfig.scopes],
+      scopes: [...environment.msalConfig.scopes],
     },
     loginFailedRoute: '/login-failed',
   };
@@ -117,10 +130,19 @@ export const appConfig: ApplicationConfig = {
       MatButtonModule,
       MatToolbarModule,
       MatListModule,
-      MatMenuModule
+      MatMenuModule,
+      MatSnackBarModule
     ),
     provideNoopAnimations(),
-    provideHttpClient(withInterceptorsFromDi(), withFetch()),
+    provideApi(
+      withBackendApiConfiguration({
+          basePath: environment.backendConfig.uri,
+      }),
+    ),
+    provideHttpClient(
+      withInterceptorsFromDi(), 
+      withFetch()
+    ),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,

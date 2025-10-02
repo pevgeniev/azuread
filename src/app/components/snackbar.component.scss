@@ -1,0 +1,49 @@
+/* Global Snackbar Styles */
+
+/* Position the snackbar at the top center */
+.mat-mdc-snack-bar-container.custom-snackbar {
+  margin: 0 auto;
+  max-width: 600px;
+  min-width: 300px;
+}
+
+/* Success snackbar styling */
+.mat-mdc-snack-bar-container.snackbar-success {
+  --mdc-snackbar-container-color: #d4edda;
+  --mdc-snackbar-supporting-text-color: #155724;
+  background-color: #d4edda !important;
+  color: #155724 !important;
+  border-left: 4px solid #28a745;
+  border-radius: 8px !important;
+}
+
+/* Error snackbar styling */
+.mat-mdc-snack-bar-container.snackbar-error {
+  --mdc-snackbar-container-color: #f8d7da;
+  --mdc-snackbar-supporting-text-color: #721c24;
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+  border-left: 4px solid #dc3545;
+  border-radius: 8px !important;
+}
+
+/* Common snackbar styling */
+.mat-mdc-snack-bar-container.custom-snackbar {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif !important;
+}
+
+/* Override Material Design default text color */
+.mat-mdc-snack-bar-container.snackbar-success .mat-mdc-snack-bar-label,
+.mat-mdc-snack-bar-container.snackbar-error .mat-mdc-snack-bar-label {
+  color: inherit !important;
+}
+
+/* Button styling */
+.mat-mdc-snack-bar-container.custom-snackbar .mat-mdc-button {
+  color: inherit !important;
+}
+
+.mat-mdc-snack-bar-container.custom-snackbar .mat-mdc-icon-button {
+  color: inherit !important;
+}

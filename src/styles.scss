@@ -1,18 +1,27 @@
-
 @use '@angular/material' as mat;
 @use '../m3-theme.scss';
 @use "sass:map";
+@use './tabulator.theme.scss';
+@use './tabulator.theme.scss' as tab;
 
 /* You can add global styles to this file, and also import other style files */
 //@import '@angular/material/prebuilt-themes/cyan-orange.css';
 
 @include mat.core();
 
-$backgroundColor: rgb(63, 66, 68);
+////////////////////////////////////////
+//      Tabulator-Grid mixin          //
+////////////////////////////////////////
+@include tab.Tabulator-default-theme(null);
+
+
+$darkBackgroundColor: rgb(63, 66, 68);
+$lightBackgroundColor: rgb(255,255,255);
 
 html,
 body {
     height: 100%;
+    scroll-behavior: smooth;
 }
 html{
     @include mat.all-component-themes(m3-theme.$light-theme);
@@ -20,8 +29,27 @@ html{
     .dark-theme {
         @include mat.all-component-colors(m3-theme.$dark-theme);
 
-        --mat-app-background-color: #{$backgroundColor} !important;
-        --mat-sidenav-content-background-color: #{$backgroundColor} !important;
+        --mat-app-background-color: #{$darkBackgroundColor} !important;
+        --mat-sidenav-content-background-color: #{$darkBackgroundColor} !important;
+    } 
+
+    .light-theme {
+        --mat-app-background-color: #{$lightBackgroundColor} !important;
+        --mat-select-content-background-color: #{$lightBackgroundColor} !important;
+        --mdc-elevated-card-container-color: #{$lightBackgroundColor} !important;
+        --mat-sidenav-content-background-color:  #{$lightBackgroundColor} !important;
+        --mdc-filled-text-field-container-color: rgb(241, 241, 241) !important;
+        --mat-sidenav-content-text-color: #{$darkBackgroundColor} !important;
+        --mat-select-panel-background-color: #{$lightBackgroundColor} !important;
+        --mat-option-focus-state-layer-color: rgb(241, 241, 241) !important;
+        --mdc-filled-text-field-focus-label-text-color: #{$darkBackgroundColor} !important;
+        --mdc-filled-text-field-focus-active-indicator-color: #{$darkBackgroundColor} !important;
+        --mat-select-focused-arrow-color: #{$darkBackgroundColor} !important;
+        --mdc-checkbox-selected-focus-icon-color: lightgrey !important;
+        --mdc-checkbox-selected-hover-icon-color: lightgrey !important;
+        --mdc-checkbox-selected-icon-color: gray !important;
+        --mat-sidenav-container-background-color: rgb(243, 213, 90);
+        --mat-menu-container-color: white !important;
     } 
 }
 
@@ -41,3 +69,96 @@ body {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.light-theme{
+    .logo{
+        background-color: #{$darkBackgroundColor} !important;
+    }
+}
+
+.main-button{
+    background: rgb(96, 119, 153) !important;
+}
+
+.dialog-header{
+    background: rgb(96, 119, 153);
+    color: white;
+}
+
+// tabulator 
+
+.tabulator {
+    font-size: 14px;
+    border: none;
+ }
+ 
+ .tabulator .tabulator-header {
+    font-weight: normal;
+    font-size: 16px;
+    border-bottom: 1px solid;
+ }
+ 
+ .tabulator .tabulator-header .tabulator-col {
+    height: 48px;
+    padding: 0 7px;
+ }
+ 
+ .tabulator-row {
+    border-bottom: 1px solid;
+    min-height: 48px;
+    vertical-align: middle;
+ }
+ 
+ .tabulator-row .tabulator-cell {
+    padding: 16px 7px;
+    border-right: none;
+    vertical-align: middle;
+ }
+ 
+ .tabulator-row .tabulator-cell:first-of-type,
+ .tabulator .tabulator-header .tabulator-col:first-of-type {
+    padding-left: 24px;
+ }
+ 
+ .tabulator-row.tabulator-row-even {
+    background-color: #ffffff;
+ }
+
+ .global-snackbar {
+    margin: 0 auto !important;
+    position: absolute;
+    bottom: 60px;
+    transform: translateX(-50%) !important;
+}
+
+/* Custom Snackbar Styles */
+.mat-mdc-snack-bar-container.custom-snackbar {
+  margin: 0 auto;
+  max-width: 600px;
+  min-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif !important;
+  border-radius: 8px !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-success {
+  --mdc-snackbar-container-color: #d4edda;
+  --mdc-snackbar-supporting-text-color: #155724;
+  background-color: #d4edda !important;
+  color: #155724 !important;
+  border-left: 4px solid #28a745;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error {
+  --mdc-snackbar-container-color: #f8d7da;
+  --mdc-snackbar-supporting-text-color: #721c24;
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+  border-left: 4px solid #dc3545;
+}
+
+.mat-mdc-snack-bar-container.custom-snackbar .mat-mdc-snack-bar-label,
+.mat-mdc-snack-bar-container.custom-snackbar .mat-mdc-button,
+.mat-mdc-snack-bar-container.custom-snackbar .mat-mdc-icon-button {
+  color: inherit !important;
+}

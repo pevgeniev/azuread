@@ -1,0 +1,19 @@
+@if (!loginDisplay) {
+<div>
+    <p class="welcome">Welcome to DevOcean demo!</p>
+    <p>Please sign-in to see more actions.</p>
+</div>
+}
+
+@if (loginDisplay) {
+<div>
+    <h2>Welcome to DevOcean demo</h2>
+    <mat-card id="mainButtons">
+        <mat-card-content>
+            <a mat-fab extended routerLink="/powerbi">
+                Power BI
+            </a>
+        </mat-card-content>
+    </mat-card>
+</div>
+}

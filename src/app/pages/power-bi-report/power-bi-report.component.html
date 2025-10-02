@@ -1,0 +1,12 @@
+<iframe *ngIf="!usePowerBiControl && !!linkReport && linkReport.length > 0" id="power-bi-frame" [src]="linkReport | safe" allowfullscreen="true">
+    
+</iframe>
+
+<powerbi-report *ngIf="usePowerBiControl && !!linkReport && linkReport.length > 0 && !!reportConfig"
+    [embedConfig]="reportConfig" 
+    [phasedEmbedding]="false"
+    [cssClassName]="'report'"
+    [eventHandlers]="eventHandlersMap"
+>
+</powerbi-report>
+
