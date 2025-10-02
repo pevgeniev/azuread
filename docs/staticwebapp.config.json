@@ -1,0 +1,23 @@
+{
+    "routes": [
+        {
+            "route": "/*.html",
+            "headers": {
+                "cache-control": "no-cache"
+            }
+        },
+        {
+            "route": "/img/*",
+            "headers": {
+                "cache-control": "must-revalidate, max-age=15770000"
+            }
+        }
+    ],  
+    "navigationFallback": {
+        "rewrite": "index.html",
+        "exclude": ["*.{svg,png,jpg,gif}","*.{css,scss}","*.js","*.txt","*.ico","*.json"]
+    },
+    "mimeTypes": {
+        ".json": "text/json"
+    }
+}
