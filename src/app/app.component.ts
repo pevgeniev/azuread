@@ -158,7 +158,9 @@ export class AppComponent implements OnInit, OnDestroy {
         if(!this.isEmbedded){
           this.isEmbeddableRoute = !!this.embedRoute;
         }
-        this.isHome = this.currentRoute.split('/')[0] == 'home';
+        const pathSegments = this.currentRoute.split('/');
+        const lastPath = pathSegments[pathSegments.length - 1];
+        this.isHome = lastPath == 'home' || lastPath == '' || lastPath == '/';
       });
   
   }
