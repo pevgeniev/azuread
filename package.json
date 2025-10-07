@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:github": "ng build --output-path docs --base-href /azuread/",
     "build:prod": "ng build --configuration production",
     "build:stage": "ng build --configuration stage",
     "postinstall:msal-angular": "node ../sample-scripts/useMsalAngularTarball.js",
