@@ -63,8 +63,8 @@ export const routes: NavRoute[] = [
     hidden: true
   },
   {
-    path: 'bianalysis',
-    title: 'BI Analysis',
+    path: 'bisales',
+    title: 'BI Sales',
     order: 20,
     component: PowerBIReportComponent,
     canActivate: [MsalGuard,MSGroupGuard],
