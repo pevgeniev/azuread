@@ -63,14 +63,26 @@ export const routes: NavRoute[] = [
     hidden: true
   },
   {
-    path: 'powerbi',
-    title: 'Sales Forecast',
+    path: 'bianalysis',
+    title: 'BI Analysis',
     order: 20,
     component: PowerBIReportComponent,
     canActivate: [MsalGuard,MSGroupGuard],
     permissions: [],
     data: {
       report: "https://app.powerbi.com/reportEmbed?reportId=481a5437-be48-4d1b-90e9-b8c8d4fca0c3&autoAuth=true&ctid=3d461195-f3e9-4dd6-b2e8-ea8457c20fc8",
+    },
+    hidden: true,
+  },
+  {
+    path: 'bifinance',
+    title: 'BI Finance',
+    order: 20,
+    component: PowerBIReportComponent,
+    canActivate: [MsalGuard,MSGroupGuard],
+    permissions: [],
+    data: {
+      report: "https://app.powerbi.com/reportEmbed?reportId=e2b6edd4-19fb-4bd7-b9a1-083c7bebe69e&autoAuth=true&ctid=3d461195-f3e9-4dd6-b2e8-ea8457c20fc8",
     },
     hidden: true,
   },
